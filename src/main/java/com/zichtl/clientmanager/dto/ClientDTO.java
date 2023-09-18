@@ -1,32 +1,68 @@
 package com.zichtl.clientmanager.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class ClientDTO {
-    private static final String NAME_REGEX = "[A-Za-z]*";
+    private static final String NAME_REGEX = "([A-Z]{1}[a-z]+[ ]?)+";
+    private static final String CPF_REGEX = "^[0-9]{11}$";
+    private static final String PHONE_REGEX = "^\\(\\d{2}\\) \\d{5}-\\d{4}$";
 
-    @NotBlank(message = "O nome não pode estar null ou vazio.")
+    @NotBlank(message = "O campo do primeiro nome é obrigatório")
+    @Size(min = 2, max = 150, message = "O nome deve conter pelo menos 2 letras.")
     @Pattern(regexp = NAME_REGEX, message = "O nome deve conter apenas letras.")
-    private String nome;
+    private String firstName;
 
+    @NotBlank(message = "O campo do sobrenome nome é obrigatório")
+    @Size(min = 2, max = 150, message = "O nome deve conter pelo menos 2 letras.")
+    @Pattern(regexp = NAME_REGEX, message = "O nome deve conter apenas letras.")
+    private String lastName;
+
+    @NotBlank(message = "O cpf não pode estar null ou vazio.")
+    @Size(min = 11, max = 11, message = "O cpf deve conter 11 dígitos numéricos.")
+    @Pattern(regexp = CPF_REGEX, message = "CPF deve conter 11 dígitos numéricos")
     private String cpf;
 
+    @Email(message = "O campo email deve conter um endereço de e-mail válido")
+    @NotBlank(message = "O campo email é obrigatório")
     private String email;
 
-    private String telefone;
+    @NotBlank(message = "O campo de número de telefone é obrigatório")
+    @Pattern(regexp = PHONE_REGEX, message = "O campo 'de telefone deve ter o formato (99) 99999-9999")
+    @Size(min = 14, max = 14, message = "O campo de telefone deve ter 14 caracteres")
+    private String phone;
 
-    private LocalDate dataNascimento;
+    @NotBlank(message = "O campo de data de nascimento é obrigatório")
+    @Past(message = "Data de nascimento deve ser menor do que a data atual.")
+    private LocalDate birthDate;
 
-
-    public String getNome() {
-        return nome;
+    public ClientDTO() {
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public ClientDTO(String firstName, String lastName, String cpf, String email, String phone, LocalDate birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cpf = cpf;
+        this.email = email;
+        this.phone = phone;
+        this.birthDate = birthDate;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getCpf() {
@@ -45,20 +81,19 @@ public class ClientDTO {
         this.email = email;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
-
 }

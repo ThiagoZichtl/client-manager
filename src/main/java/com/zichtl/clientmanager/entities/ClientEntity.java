@@ -1,22 +1,26 @@
 package com.zichtl.clientmanager.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = ClientEntity.TABLE)
 public class ClientEntity {
-    protected static final String TABLE = "clientes";
+    protected static final String TABLE = "clients"; // Constante para o nome da tabela
 
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
 
-    @Column(nullable = false, length = 150)
-    private String nome;
+    @Column(nullable = false, length = 100)
+    private String firstName;
+
+    @Column(nullable = false, length = 100)
+    private String lastName;
 
     @Column(nullable = false, length = 11)
     private String cpf;
@@ -25,21 +29,21 @@ public class ClientEntity {
     private String email;
 
     @Column(nullable = false, length = 11)
-    private String telefone;
+    private String phone;
 
     @Column(nullable = false)
-    private LocalDate dataNascimento;
+    private LocalDate birthDate;
 
     public ClientEntity() {
     }
 
-    public ClientEntity(Long id, String nome, String cpf, String email, String telefone, LocalDate dataNascimento) {
-        this.id = id;
-        this.nome = nome;
+    public ClientEntity(String firstName, String lastName, String cpf, String email, String phone, LocalDate birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.cpf = cpf;
         this.email = email;
-        this.telefone = telefone;
-        this.dataNascimento = dataNascimento;
+        this.phone = phone;
+        this.birthDate = birthDate;
     }
 
     public Long getId() {
@@ -50,12 +54,20 @@ public class ClientEntity {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getCpf() {
@@ -74,20 +86,19 @@ public class ClientEntity {
         this.email = email;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
-
 }

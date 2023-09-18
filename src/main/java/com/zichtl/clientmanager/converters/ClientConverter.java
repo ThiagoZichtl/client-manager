@@ -4,30 +4,33 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zichtl.clientmanager.dto.ClientDTO;
 import com.zichtl.clientmanager.entities.ClientEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
 public class ClientConverter {
 
-    public static ClientDTO convertFromDTO(ClientEntity clients) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
+    private final ObjectMapper objectMapper;
 
-        try {
-            String json = mapper.writeValueAsString(clients);
-            return mapper.readValue(json, ClientDTO.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    @Autowired
+    public ClientConverter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
-    public static ClientEntity convertFromDTO(ClientDTO clientDTO) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
+    public ClientEntity convertToEntity(ClientDTO clientDTO) {
+        return objectMapper.convertValue(clientDTO, ClientEntity.class);
+    }
 
-        try {
-            String json = mapper.writeValueAsString(clientDTO);
-            return mapper.readValue(json, ClientEntity.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public ClientDTO convertToDTO(ClientEntity clientEntity) {
+        return objectMapper.convertValue(clientEntity, ClientDTO.class);
+    }
+
+    public List<ClientDTO> convertToDTOList(List<ClientEntity> clientEntities) {
+        return clientEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 }
