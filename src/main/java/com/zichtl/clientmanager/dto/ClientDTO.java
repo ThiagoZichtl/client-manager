@@ -35,7 +35,6 @@ public class ClientDTO {
     @Size(min = 10, max = 20, message = "O campo de telefone deve ter 14 caracteres")
     private String phone;
 
-//    @NotBlank(message = "O campo de data de nascimento é obrigatório")
     @Past(message = "Data de nascimento deve ser menor do que a data atual.")
     private LocalDate birthDate;
 

@@ -19,10 +19,10 @@ public class ClientMock {
 
     public static List<ClientEntity> generateClientList(){
         List<ClientEntity> clients = new ArrayList<>();
-        clients.add(generateClient(1L, "Shiba", "Igor", "111.111.111-11"));
-        clients.add(generateClient(2L, "Pit", "Igor", "222.222.222-22"));
-        clients.add(generateClient(3L, "Husky", "Igor", "333.333.333-33"));
-        clients.add(generateClient(4L, "Bulldog", "Igor", "444.444.444-44"));
+        clients.add(generateClient(1L, "Ichi", "Jii", "111.111.111-11"));
+        clients.add(generateClient(2L, "Nii", "Jii", "222.222.222-22"));
+        clients.add(generateClient(3L, "San", "Jii", "333.333.333-33"));
+        clients.add(generateClient(4L, "Yon", "Jii", "444.444.444-44"));
         return clients;
     }
 

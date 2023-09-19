@@ -35,7 +35,7 @@ public class ClientControllerUnitTests {
 
     @BeforeAll
     public static void beforeAll(){
-        client = generateClient(1L, "Shiba", "Igor", "111.111.111-11");
+        client = generateClient(1L, "Rei", "Juu", "000.000.000-00");
         id = client.getId();
     }
 
