@@ -24,13 +24,13 @@ public class ClientEntity {
     @Column(nullable = false, length = 100)
     private String lastName;
 
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 14)
     private String cpf;
 
     @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 20)
     private String phone;
 
     @Column(nullable = false)

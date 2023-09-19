@@ -8,8 +8,8 @@ import java.time.LocalDate;
 public class ClientDTO {
 
     private static final String NAME_REGEX = "([A-Z]{1}[a-z]+[ ]?)+";
-    private static final String CPF_REGEX = "^[0-9]{11}$";
-    private static final String PHONE_REGEX = "^\\(\\d{2}\\) \\d{5}-\\d{4}$";
+    private static final String CPF_REGEX = "^[0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2}";
+    private static final String PHONE_REGEX = "[(][0-9]{2,3}[)][ ]?[0-9]{4,5}-[0-9]{4}";
 
     @NotBlank(message = "O campo do primeiro nome é obrigatório")
     @Size(min = 2, max = 150, message = "O nome deve conter pelo menos 2 letras.")
@@ -22,7 +22,7 @@ public class ClientDTO {
     private String lastName;
 
     @NotBlank(message = "O cpf não pode estar null ou vazio.")
-    @Size(min = 11, max = 11, message = "O cpf deve conter 11 dígitos numéricos.")
+    @Size(min = 11, max = 14, message = "O cpf deve conter 11 dígitos numéricos.")
     @Pattern(regexp = CPF_REGEX, message = "CPF deve conter 11 dígitos numéricos")
     private String cpf;
 
@@ -32,10 +32,10 @@ public class ClientDTO {
 
     @NotBlank(message = "O campo de número de telefone é obrigatório")
     @Pattern(regexp = PHONE_REGEX, message = "O campo 'de telefone deve ter o formato (99) 99999-9999")
-    @Size(min = 14, max = 14, message = "O campo de telefone deve ter 14 caracteres")
+    @Size(min = 10, max = 20, message = "O campo de telefone deve ter 14 caracteres")
     private String phone;
 
-    @NotBlank(message = "O campo de data de nascimento é obrigatório")
+//    @NotBlank(message = "O campo de data de nascimento é obrigatório")
     @Past(message = "Data de nascimento deve ser menor do que a data atual.")
     private LocalDate birthDate;
 
