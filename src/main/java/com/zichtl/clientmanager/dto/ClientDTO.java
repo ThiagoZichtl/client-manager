@@ -1,10 +1,12 @@
 package com.zichtl.clientmanager.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
-
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"id"})
 public class ClientDTO {
+
     private static final String NAME_REGEX = "([A-Z]{1}[a-z]+[ ]?)+";
     private static final String CPF_REGEX = "^[0-9]{11}$";
     private static final String PHONE_REGEX = "^\\(\\d{2}\\) \\d{5}-\\d{4}$";
@@ -95,5 +97,23 @@ public class ClientDTO {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClientDTO clientDTO = (ClientDTO) o;
+
+        if (!cpf.equals(clientDTO.cpf)) return false;
+        return email.equals(clientDTO.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = cpf.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
     }
 }

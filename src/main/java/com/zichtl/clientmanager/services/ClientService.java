@@ -2,18 +2,15 @@ package com.zichtl.clientmanager.services;
 
 import com.zichtl.clientmanager.entities.ClientEntity;
 import com.zichtl.clientmanager.repositories.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {
 
     private final ClientRepository clientRepository;
 
-    @Autowired
     public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
@@ -30,15 +27,15 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public ClientEntity updateClient(Long id, ClientEntity client) {
-        if (clientRepository.existsById(id)) {
-            client.setId(id);
-            return clientRepository.save(client);
+    public void updateClient(Long id, ClientEntity client) {
+        if (!clientRepository.existsById(id)) {
+            throw new RuntimeException("Cliente não existe.");
         }
-        return null;
+        client.setId(id);
+        clientRepository.save(client);
     }
 
-    public boolean deleteClient(Long id) {
+    public Boolean deleteClient(Long id) {
         if (clientRepository.existsById(id)) {
             clientRepository.deleteById(id);
             return true;

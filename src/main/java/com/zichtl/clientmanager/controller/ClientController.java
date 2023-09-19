@@ -20,55 +20,46 @@ import java.util.Optional;
 public class ClientController {
 
     private final ClientService clientService;
-    private final ClientConverter clientConverter;
 
     @Autowired
-    public ClientController(ClientService clientService, ClientConverter clientConverter) {
+    public ClientController(ClientService clientService) {
         this.clientService = clientService;
-        this.clientConverter = clientConverter;
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@RequestBody @Valid ClientDTO clientDTO) {
-        ClientEntity client = clientConverter.convertToEntity(clientDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientDTO createClient(@RequestBody @Valid ClientDTO clientDTO) {
+        ClientEntity client = ClientConverter.convertToEntity(clientDTO);
         ClientEntity createdClient = clientService.createClient(client);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clientConverter.convertToDTO(createdClient));
+        return ClientConverter.convertToDTO(createdClient);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.FOUND)
+    public ClientDTO getClientById(@PathVariable Long id) {
         ClientEntity client = clientService.getClientById(id);
-        if (client != null) {
-            return ResponseEntity.ok().body(clientConverter.convertToDTO(client));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ClientConverter.convertToDTO(client);
     }
 
     @GetMapping
-    public ResponseEntity<List<ClientDTO>> getAllClients() {
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<ClientDTO> getAllClients() {
         List<ClientEntity> clients = clientService.getAllClients();
-        List<ClientDTO> clientDTOs = clientConverter.convertToDTOList(clients);
-        return ResponseEntity.ok().body(clientDTOs);
+        return ClientConverter.convertToDTOList(clients);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody @Valid ClientDTO clientDTO) {
-        ClientEntity client = clientConverter.convertToEntity(clientDTO);
-        ClientEntity updatedClient = clientService.updateClient(id, client);
-        if (updatedClient != null) {
-            return ResponseEntity.ok().body(clientConverter.convertToDTO(updatedClient));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void updateClient(@PathVariable Long id, @RequestBody @Valid ClientDTO clientDTO) {
+        ClientEntity client = ClientConverter.convertToEntity(clientDTO);
+        clientService.updateClient(id, client);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-        if (clientService.deleteClient(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Boolean deleteClient(@PathVariable Long id) {
+        return clientService.deleteClient(id);
     }
+
+
 }

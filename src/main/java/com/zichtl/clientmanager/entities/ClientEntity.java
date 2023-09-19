@@ -5,11 +5,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = ClientEntity.TABLE)
 public class ClientEntity {
-    protected static final String TABLE = "clients"; // Constante para o nome da tabela
+
+    protected static final String TABLE = "clients";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -101,4 +103,6 @@ public class ClientEntity {
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
+
+
 }

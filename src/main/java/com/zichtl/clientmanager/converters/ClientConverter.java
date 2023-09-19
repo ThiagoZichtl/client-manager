@@ -10,27 +10,23 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class ClientConverter {
 
-    private final ObjectMapper objectMapper;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Autowired
-    public ClientConverter(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    public ClientEntity convertToEntity(ClientDTO clientDTO) {
+    public static ClientEntity convertToEntity(ClientDTO clientDTO) {
+        objectMapper.findAndRegisterModules();
         return objectMapper.convertValue(clientDTO, ClientEntity.class);
     }
 
-    public ClientDTO convertToDTO(ClientEntity clientEntity) {
+    public static ClientDTO convertToDTO(ClientEntity clientEntity) {
+        objectMapper.findAndRegisterModules();
         return objectMapper.convertValue(clientEntity, ClientDTO.class);
     }
 
-    public List<ClientDTO> convertToDTOList(List<ClientEntity> clientEntities) {
+    public static List<ClientDTO> convertToDTOList(List<ClientEntity> clientEntities) {
         return clientEntities.stream()
-                .map(this::convertToDTO)
+                .map(ClientConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 }

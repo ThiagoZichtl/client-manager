@@ -1,9 +1,7 @@
-package com.zichtl.clientmanager.controller;
+package com.zichtl.clientmanager.services;
 
-import com.zichtl.clientmanager.converters.ClientConverter;
-import com.zichtl.clientmanager.dto.ClientDTO;
 import com.zichtl.clientmanager.entities.ClientEntity;
-import com.zichtl.clientmanager.services.ClientService;
+import com.zichtl.clientmanager.repositories.ClientRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,20 +13,21 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.zichtl.clientmanager.mock.ClientMock.generateClient;
 import static com.zichtl.clientmanager.mock.ClientMock.generateClientList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ClientControllerUnitTests {
+public class ClientServiceUnitTests {
 
     @Spy
     @InjectMocks
-    private ClientController clientController;
+    private ClientService clientService;
 
     @Mock
-    private ClientService clientService;
+    private ClientRepository clientRepository;
 
     private static ClientEntity client;
     private static long id;
@@ -41,51 +40,45 @@ public class ClientControllerUnitTests {
 
     @Test
     void testCreateClientValidData() {
-        when(clientService.createClient(Mockito.any(ClientEntity.class))).thenReturn(client);
-        ClientDTO expected = ClientConverter.convertToDTO(client);
-        ClientDTO actual = clientController.createClient(expected);
+        when(clientRepository.save(Mockito.any(ClientEntity.class))).thenReturn(client);
+        ClientEntity actual = clientService.createClient(client);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(client, actual);
     }
 
     @Test
     void testGetClientByIDValidData() {
-        when(clientService.getClientById(client.getId())).thenReturn(client);
-        ClientDTO expected = ClientConverter.convertToDTO(client);
-        ClientDTO actual = clientController.getClientById(client.getId());
+        when(clientRepository.findById(client.getId())).thenReturn(Optional.ofNullable(client));
+        ClientEntity actual = clientService.getClientById(client.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(client, actual);
     }
 
     @Test
     void testGetAllClientsValidData() {
         List<ClientEntity> clients = generateClientList();
-        when(clientService.getAllClients()).thenReturn(clients);
-        List<ClientDTO> expected = ClientConverter.convertToDTOList(clients);
-        List<ClientDTO> actual = clientController.getAllClients();
+        when(clientRepository.findAll()).thenReturn(clients);
+        List<ClientEntity> actual = clientService.getAllClients();
         Assertions.assertNotNull(actual);
         Assertions.assertFalse(actual.isEmpty());
-        Assertions.assertEquals(expected.size(), actual.size());
+        Assertions.assertEquals(clients.size(), actual.size());
     }
 
     @Test
     void testUpdateClientValidData() {
         doNothing().when(clientService).updateClient(Mockito.anyLong(), Mockito.any(ClientEntity.class));
-        ClientDTO clientDTO = ClientConverter.convertToDTO(client);
-        clientController.updateClient(client.getId(), clientDTO);
-        verify(clientController, times(1)).updateClient(client.getId(), clientDTO);
+        clientService.updateClient(client.getId(), client);
+        verify(clientService, times(1)).updateClient(client.getId(), client);
     }
 
     @Test
     void testDeleteClientValidData() {
-        when(clientService.deleteClient(client.getId())).thenReturn(true);
-        Boolean actual = clientController.deleteClient(client.getId());
+        when(clientRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        doNothing().when(clientRepository).deleteById(Mockito.anyLong());
+        Boolean actual = clientService.deleteClient(client.getId());
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual);
     }
 
 
-
 }
-
-
